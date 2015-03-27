@@ -1,2 +1,1 @@
-# easeljs-game-skelley
 # spaceout
