@@ -13,6 +13,8 @@ module.exports = function(grunt) {
 			scripts: {
 				src: [
 					'bower_components/easeljs/lib/easeljs-0.8.0.combined.js',
+					'bower_components/PreloadJS/lib/preloadjs-0.6.0.combined.js',
+					'bower_components/Collision-Detection-for-EaselJS/src/ndgmr.Collision.js',
 				],
 				dest: 'build/scripts/',
 				expand: true,

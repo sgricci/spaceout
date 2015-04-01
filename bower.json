@@ -1,13 +1,15 @@
 {
-	"name": "easeljs-game-skelley",
+	"name": "spaceout",
 	"version": "0.0.0",
 	"authors": [
 		"Space Ghost <sg@ghostlandia.com>"
 	],
-	"description": "Just another game skeleton",
+	"description": "Just another Breakout clone",
 	"main": "index.html",
 	"license": "None",
 	"dependencies": {
-		"easeljs": "*"
+		"easeljs": "*",
+		"PreloadJS": "*",
+		"ndgmr": "olsn/Collision-Detection-for-EaselJS"
 	}
 }

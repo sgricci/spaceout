@@ -9,6 +9,7 @@ var GameState = BaseState.extend({
 	ball      : null,
 	level     : null,
 	container : null,
+	ready: false,
 	keymap    : {},
 	init: function(game) {
 		this.game = game;
@@ -17,17 +18,14 @@ var GameState = BaseState.extend({
 	},
 	create: function() {
 		this.container = new createjs.Container();
+		this.player = new Player(this.game.loader, 10, 610, 20, 50);
+		this.ball = new Ball(this.game.loader, 40, 500);
+		this.level = new Level_1(this.game.loader);
 
-		this.player = new Player(10, 610, 20, 50);
-
-		this.player.add(this.container);
-		
-		this.ball = new Ball(40, 500);
-		
-		this.ball.add(this.container);
-
-		this.level = new Level_1();
-
+		this.container.addChild(
+			this.player.getDrawable(),
+			this.ball.getDrawable()
+		);
 		this.level.add(this.container);
 
 		this.game.stage.addChild(this.container);
@@ -42,11 +40,10 @@ var GameState = BaseState.extend({
 	onkeyup: function(event) {
 		delete this.keymap[event.which];
 	},
-	tick: function() {
-		this.game.stage.clear();
-		this.player.tick(this.keymap, this.ball);
-		this.level.tick();
-		this.ball.tick();
+	tick: function(delta) {
+		this.player.tick(delta, this.keymap, this.ball);
+		this.level.tick(delta, this.ball);
+		this.ball.tick(delta);
 		this.game.stage.update();
 	}
 });

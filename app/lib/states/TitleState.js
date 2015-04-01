@@ -5,6 +5,7 @@ var TitleState = BaseState.extend({
 	container : null,
 	title     : null,
 	directions: null,
+	ready: false,
 	init: function(game) {
 		this.game = game;
 		this.container = new createjs.Container();
@@ -20,7 +21,7 @@ var TitleState = BaseState.extend({
 		this.title.y = (640/2)-(titleRect.height/2);
 		this.container.addChild(this.title);
 
-		this.directions = new createjs.Text("Click anywhere to play");
+		this.directions = new createjs.Text("Loading...");
 		this.directions.font = "bold 14px 'Press Start 2P'";
 		this.directions.color = "#fff";
 		directionsRect = this.directions.getBounds();
@@ -34,10 +35,23 @@ var TitleState = BaseState.extend({
 
 		this.game.stage.update();
 	},
+	loaded: function() {
+		this.ready = true;
+		this.container.removeChild(this.directions);
+		this.directions = new createjs.Text("Click anywhere to start");
+		this.directions.font = "bold 14px 'Press Start 2P'";
+		this.directions.color = "#fff";
+		directionsRect = this.directions.getBounds();
+		this.directions.x = (480/2)-(directionsRect.width/2);
+		this.directions.y = (640/2)-(directionsRect.height/2)+100;
+		this.container.addChild(this.directions);
+	},
 	bind: function() {
 		var self = this;
 		document.onmouseup = function() {
-			self.next();
+			if (self.ready) {
+				self.next();
+			}
 		};
 	},
 	next: function() {

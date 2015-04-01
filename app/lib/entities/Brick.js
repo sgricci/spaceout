@@ -5,21 +5,25 @@ var Brick = Base.extend({
 		x: 0,
 		y: 0
 	},
-	width: 100,
-	height: 25,
-	shape: null,
-	init: function(x, y) {
+	img: null,
+	sprite: null,
+	init: function(loader, x, y) {
 		this.position.x = x;
 		this.position.y = y;
-		this.shape = new createjs.Shape();
+		this.img = loader.getResult('brick');
+		this.create();
 	},
-	tick: function() {
-		this.shape.graphics.clear();
-		this.shape.graphics.beginFill("#f00");
-		this.shape.graphics.drawRect(
-			this.position.x, this.position.y,
-			this.width, this.height
-		);
+	create: function() {
+		this.sprite = new createjs.Bitmap(this.img);
+		this.sprite.scaleX = 1;
+		this.sprite.scaleY = 1;
+		this.sprite.x = this.position.x;
+		this.sprite.y = this.position.y;
+	},
+	getDrawable: function() {
+		return this.sprite;
+	},
+	tick: function(delta, ball) {
 	}
 });
 
