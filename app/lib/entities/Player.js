@@ -5,6 +5,10 @@ var Player = Base.extend({
 		x: 0,
 		y: 0
 	},
+	initial: {
+		x: 0,
+		y: 0
+	},
 	width  : 0,
 	height : 0,
 	shape  : null,
@@ -16,6 +20,8 @@ var Player = Base.extend({
 		this.sprite = new createjs.Bitmap(img);
 		this.position.x = x;
 		this.position.y = y;
+		this.initial.x = x;
+		this.initial.y = y;
 		this.width  = w;
 		this.height = h;
 		this.create();
@@ -42,6 +48,10 @@ var Player = Base.extend({
 			this.position.x = 410;
 		}
 	},
+	reset: function() {
+		this.position.x = this.initial.x;
+		this.position.y = this.initial.y;
+	},
 	tick: function(delta, keymap, ball) {
 		this.move(delta, keymap);
 		this.sprite.x = this.position.x;
@@ -58,6 +68,7 @@ var Player = Base.extend({
 				ball.collision('center', delta);
 				console.log('hit center');
 			}
+			var instance = new createjs.Sound.play('blip');
 		}
 	},
 });

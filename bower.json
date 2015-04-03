@@ -10,6 +10,7 @@
 	"dependencies": {
 		"easeljs": "*",
 		"PreloadJS": "*",
+		"SoundJS": "*",
 		"ndgmr": "olsn/Collision-Detection-for-EaselJS"
 	}
 }

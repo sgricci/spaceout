@@ -7,10 +7,10 @@ var Brick = Base.extend({
 	},
 	img: null,
 	sprite: null,
-	init: function(loader, x, y) {
+	init: function(loader, x, y, color) {
 		this.position.x = x;
 		this.position.y = y;
-		this.img = loader.getResult('brick');
+		this.img = loader.getResult(this.get_color(color));
 		this.create();
 	},
 	create: function() {
@@ -19,6 +19,20 @@ var Brick = Base.extend({
 		this.sprite.scaleY = 1;
 		this.sprite.x = this.position.x;
 		this.sprite.y = this.position.y;
+	},
+	get_color: function(sel) {
+		switch(sel) {
+			case 0:
+				return 'brick_brown';
+			case 1:
+				return 'brick_yellow';
+			case 2:
+				return 'brick_grey';
+			case 3:
+				return 'brick_purple';
+			case 4:
+				return 'brick_red';
+		}
 	},
 	getDrawable: function() {
 		return this.sprite;

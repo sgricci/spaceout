@@ -14,6 +14,7 @@ module.exports = function(grunt) {
 				src: [
 					'bower_components/easeljs/lib/easeljs-0.8.0.combined.js',
 					'bower_components/PreloadJS/lib/preloadjs-0.6.0.combined.js',
+					'bower_components/SoundJS/lib/soundjs-0.6.0.combined.js',
 					'bower_components/Collision-Detection-for-EaselJS/src/ndgmr.Collision.js',
 				],
 				dest: 'build/scripts/',
@@ -33,6 +34,14 @@ module.exports = function(grunt) {
 					'app/img/**',
 				],
 				dest: 'build/img/',
+				expand: true,
+				flatten: true,
+			},
+			sound: {
+				src: [
+					'app/sound/**',
+				],
+				dest: 'build/sound/',
 				expand: true,
 				flatten: true,
 			}

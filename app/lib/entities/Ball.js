@@ -9,11 +9,13 @@ var Ball = Base.extend({
 		x: 160,
 		y: 200
 	},
+	gamestate: null,
 	radius : 10,
 	shape  : null,
 	img: null,
 	sprite: null,
-	init: function(loader, x, y) {
+	init: function(gamestate, loader, x, y) {
+		this.gamestate = gamestate;
 		this.img = loader.getResult('ball');
 		this.position.x = x;
 		this.position.y = y;
@@ -49,25 +51,41 @@ var Ball = Base.extend({
 		if (this.position.x < 0) {
 			this.position.x = 0;
 			this.speed.x *= -1;
+			var instance = new createjs.Sound.play('bump');
 		}
 		if (this.position.x > 470) {
 			this.position.x = 470;
 			this.speed.x *= -1;
+			var instance = new createjs.Sound.play('bump');
 		}
 		if (this.position.y < 0) {
 			this.position.y = 0;
 			this.speed.y *= -1;
+			var instance = new createjs.Sound.play('bump');
 		}
 
 		if (this.position.y > 640) {
 			this.speed.y = 0;
 			this.speed.x = 0;
+			this.position.x = 40;
+			this.position.y = 500;
+			var instance = new createjs.Sound.play('died');
+			this.gamestate.decrementLife();
+			this.gamestate.reset();
 		}
+	},
+	reset: function() {
+		this.position.x = 40;
+		this.position.y = 500;
+		this.speed = {
+			x: 160,
+			y: 200
+		};
 	},
 	collision: function(collision_type, delta) {
 		switch(collision_type) {
 			case 'block':
-				this.speed.x *= -1;
+				//this.speed.x *= -1;
 				this.speed.y *= -1;
 				break;
 			case 'left':
