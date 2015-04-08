@@ -14,11 +14,15 @@ var BaseLevel = Base.extend({
 	add: function(container) {
 		container.addChild(this.container);
 	},
+	remove: function(container) {
+		container.removeChild(this.container);
+	},
 	tick: function(delta, ball) {
 		for (var i = 0; i < this.bricks.length; i++) {
 			if (typeof(this.bricks[i]) == "undefined") continue;
 			this.bricks[i].tick(delta);
 			if (ndgmr.checkRectCollision(this.bricks[i].sprite, ball.sprite)) {
+				this.gamestate.brickDestroy(this.bricks[i].sprite);
 				this.container.removeChild(this.bricks[i].getDrawable());
 				delete this.bricks[i];
 				ball.collision('block', delta);
@@ -26,6 +30,18 @@ var BaseLevel = Base.extend({
 				this.gamestate.addScore(100);
 			}
 		}
+	},
+	remaining: function() {
+		count = 0;
+		for (var i = 0; i < this.bricks.length; i++) {
+			if (typeof this.bricks[i] !== "undefined") {
+				count++;
+			}
+		}
+		return count;
+	},
+	is_complete: function() {
+		return (this.remaining() == 0);
 	}
 });
 

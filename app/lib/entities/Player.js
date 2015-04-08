@@ -1,6 +1,8 @@
 var Base = require('../Base');
+var NonePowerup = require('./powerups/NonePowerup');
 
 var Player = Base.extend({
+	last_mouse_x: null,
 	position: {
 		x: 0,
 		y: 0
@@ -11,52 +13,58 @@ var Player = Base.extend({
 	},
 	width  : 0,
 	height : 0,
-	shape  : null,
-	img    : null,
-	sprite : null,
+	powerup: null,
 	speed  : 250,
+	max_x  : 410,
+	min_x  : 10,
 	init: function(loader, x, y, w, h) {
-		img = loader.getResult("player");
-		this.sprite = new createjs.Bitmap(img);
+		this.powerup = new NonePowerup(loader);
 		this.position.x = x;
 		this.position.y = y;
 		this.initial.x = x;
 		this.initial.y = y;
 		this.width  = w;
 		this.height = h;
-		this.create();
 	},
 	getDrawable: function() {
-		return this.sprite;
+		return this.powerup.getDrawable();
 	},
-	create: function() {
-		this.shape = new createjs.Shape();
-	},
-	move: function(delta, keymap) {
+	move: function(delta, keymap, mouse_x) {
 		if (keymap[37] || keymap[65]) { this.moveLeft(delta); }
 		if (keymap[39] || keymap[68]) { this.moveRight(delta); }
+		if (mouse_x != this.last_mouse_x) {
+			this.position.x = mouse_x - (this.powerup.width/2);
+			this.last_mouse_x = mouse_x;
+			this.checkLeft();
+			this.checkRight();
+		}
+		this.powerup.set(this.position.x, this.position.y);
 	},
 	moveLeft: function(delta) {
 		this.position.x -= this.speed * delta;
-		if (this.position.x < 10) {
-			this.position.x = 10;
+		this.checkLeft();
+	},
+	checkLeft: function() {
+		if (this.position.x < this.min_x) {
+			this.position.x = this.min_x;
 		}
 	},
 	moveRight: function(delta) {
 		this.position.x += this.speed * delta;
-		if (this.position.x > 410) {
-			this.position.x = 410;
+		this.checkRight();
+	},
+	checkRight: function() {
+		if (this.position.x > this.max_x) {
+			this.position.x = this.max_x;
 		}
 	},
 	reset: function() {
 		this.position.x = this.initial.x;
 		this.position.y = this.initial.y;
 	},
-	tick: function(delta, keymap, ball) {
-		this.move(delta, keymap);
-		this.sprite.x = this.position.x;
-		this.sprite.y = this.position.y;
-		var intersection = ndgmr.checkRectCollision(this.sprite,ball.sprite); 
+	tick: function(delta, keymap, mouse_x, ball) {
+		this.move(delta, keymap, mouse_x);
+		var intersection = ndgmr.checkRectCollision(this.powerup.getDrawable(),ball.sprite); 
 		if (intersection) {
 			if (intersection.x - intersection.rect1.x <= 10) {
 				ball.collision('left', delta);
