@@ -29,7 +29,10 @@ var Player = Base.extend({
 	getDrawable: function() {
 		return this.powerup.getDrawable();
 	},
-	move: function(delta, keymap, mouse_x) {
+	get_pos: function() {
+		return this.position;
+	},
+	interact: function(delta, keymap, mouse_x, gamestate) {
 		if (keymap[37] || keymap[65]) { this.moveLeft(delta); }
 		if (keymap[39] || keymap[68]) { this.moveRight(delta); }
 		if (mouse_x != this.last_mouse_x) {
@@ -39,6 +42,7 @@ var Player = Base.extend({
 			this.checkRight();
 		}
 		this.powerup.set(this.position.x, this.position.y);
+		this.powerup.interact(delta, keymap, this, gamestate);
 	},
 	moveLeft: function(delta) {
 		this.position.x -= this.speed * delta;
@@ -58,12 +62,16 @@ var Player = Base.extend({
 			this.position.x = this.max_x;
 		}
 	},
-	reset: function() {
+	reset: function(container, game) {
 		this.position.x = this.initial.x;
 		this.position.y = this.initial.y;
+		this.powerup.remove(container);
+		this.powerup = new NonePowerup(game.loader);
+		container.addChild(this.powerup.getDrawable());
 	},
-	tick: function(delta, keymap, mouse_x, ball) {
-		this.move(delta, keymap, mouse_x);
+	tick: function(delta, keymap, mouse_x, ball, gamestate) {
+		this.powerup.tick(delta);
+		this.interact(delta, keymap, mouse_x, gamestate);
 		var intersection = ndgmr.checkRectCollision(this.powerup.getDrawable(),ball.sprite); 
 		if (intersection) {
 			if (intersection.x - intersection.rect1.x <= 10) {

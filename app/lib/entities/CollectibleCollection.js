@@ -9,11 +9,7 @@ var CollectibleCollection = Base.extend({
 		this.container = container;
 	},
 	spawnPowerup: function(x, y) {
-		console.log(Collectibles.length);
 		var random = Math.floor(Math.random()*(Collectibles.length/2));
-		console.log(random);
-		console.log(x+", "+y);
-
 		this.collectibles.push(new Collectibles[random](this.loader, (x-(24/2)), y, this.container));
 	},
 	tick: function(delta) {
@@ -34,6 +30,12 @@ var CollectibleCollection = Base.extend({
 			}
 		}
 		return false;
+	},
+	reset: function() {
+		for(var i = 0; i < this.collectibles.length; i++) {
+			this.collectibles[i].remove(this.container);
+		}
+		this.collectibles = [];
 	}
 });
 

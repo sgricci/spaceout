@@ -3,9 +3,9 @@
 ## Power Ups
 
 ### Paddle
-Laser
-Elongate/Extend
-Sticky
+[X] - Laser
+[X] - Elongate/Extend 
+[ ] - Sticky
 
 ### Ball
 Breakthrough/Bigger Ball
@@ -17,7 +17,7 @@ Extra Life
 ## Power downs -
 
 ### Paddle
-Shrink/Shorten
+[X] - Shrink/Shorten
 
 ### Ball
 Speed up

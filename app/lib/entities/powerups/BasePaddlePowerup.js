@@ -26,6 +26,10 @@ var BasePaddlePowerup = BasePowerup.extend({
 	},
 	remove: function(container) {
 		container.removeChild(this.sprite);
+	},
+	interact: function(delta, keymap, player) {
+	},
+	tick: function(delta) {
 	}
 });
 

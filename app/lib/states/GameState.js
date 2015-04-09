@@ -3,9 +3,7 @@ var Player = require('../entities/Player');
 var Ball = require('../entities/Ball');
 var LevelManager = require('../levels/Manager');
 var CollectibleCollection = require('../entities/CollectibleCollection');
-//var Level_1 = require('../levels/Level_1');
-//var Level_2 = require('../levels/Level_2');
-//var Level_3 = require('../levels/Level_3');
+var ProjectileCollection = require('../entities/ProjectileCollection');
 var OSD = require('../utils/OSD');
 
 var GameState = BaseState.extend({
@@ -32,6 +30,7 @@ var GameState = BaseState.extend({
 		this.lm = new LevelManager(this);
 		this.container = new createjs.Container();
 		this.collectibles = new CollectibleCollection(this.game.loader, this.container);
+		this.projectiles = new ProjectileCollection(this.game.loader, this.container);
 		this.player = new Player(this.game.loader, 10, 610, 20, 50);
 		this.ball = new Ball(this, this.game.loader, 40, 500);
 		this.level = this.lm.load();
@@ -50,8 +49,9 @@ var GameState = BaseState.extend({
 		this.score += parseInt(score, 10);
 	},
 	reset: function() {
-		this.player.reset();
+		this.player.reset(this.container, this.game);
 		this.ball.reset();
+		this.collectibles.reset();
 	},
 	decrementLife: function() {
 		if (this.lives == 0) {
@@ -62,13 +62,15 @@ var GameState = BaseState.extend({
 	},
 	brickDestroy: function(brick) {
 		var rando = Math.round(Math.random()*100);
-		//if (rando < 10) {
-			console.log('spawnPowerup');
+		if (rando < 50) {
 			this.collectibles.spawnPowerup(
 					brick.x+(48/2),
 					brick.y+(16/2)
 					);
-		//}
+		}
+	},
+	addProjectile: function() {
+		this.projectiles.add(this.player.get_pos());
 	},
 	game_over: function() {
 		this.game_is_over = true;
@@ -101,10 +103,11 @@ var GameState = BaseState.extend({
 	},
 	tick: function(delta) {
 		if (!this.game_is_over) {
-			this.player.tick(delta, this.keymap, this.mouse_x, this.ball);
-			this.level.tick(delta, this.ball);
+			this.player.tick(delta, this.keymap, this.mouse_x, this.ball, this);
+			this.level.tick(delta, this.ball, this.projectiles);
 			this.ball.tick(delta);
 			this.collectibles.tick(delta);
+			this.projectiles.tick(delta);
 			var powerup = this.collectibles.collision_check(this.player);
 			if (powerup !== false) {
 				this.player.powerup.remove(this.container);
