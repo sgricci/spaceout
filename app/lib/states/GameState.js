@@ -8,6 +8,7 @@ var OSD = require('../utils/OSD');
 
 var GameState = BaseState.extend({
 	mouse_x   : null,
+	mouse_down: false,
 	game      : null,
 	player    : null,
 	ball      : null,
@@ -48,9 +49,10 @@ var GameState = BaseState.extend({
 	addScore: function(score) {
 		this.score += parseInt(score, 10);
 	},
-	reset: function() {
-		this.player.reset(this.container, this.game);
+	reset: function(reset_powerup) {
+		this.player.reset(this.container, this.game, reset_powerup);
 		this.ball.reset();
+		this.projectiles.reset();
 		this.collectibles.reset();
 	},
 	decrementLife: function() {
@@ -62,7 +64,7 @@ var GameState = BaseState.extend({
 	},
 	brickDestroy: function(brick) {
 		var rando = Math.round(Math.random()*100);
-		if (rando < 50) {
+		if (rando < 10) {
 			this.collectibles.spawnPowerup(
 					brick.x+(48/2),
 					brick.y+(16/2)
@@ -89,6 +91,12 @@ var GameState = BaseState.extend({
 		this.game.stage.on("stagemousemove", function(event) {
 			self.mouse_x = event.stageX;
 		});
+		this.game.stage.on("stagemousedown", function(event) {
+			self.mouse_down = true;
+		});
+		this.game.stage.on("stagemouseup", function(event) {
+			self.mouse_down = false;
+		});
 	},
 	onkeydown: function(event) {
 		this.keymap[event.which] = true;
@@ -103,7 +111,7 @@ var GameState = BaseState.extend({
 	},
 	tick: function(delta) {
 		if (!this.game_is_over) {
-			this.player.tick(delta, this.keymap, this.mouse_x, this.ball, this);
+			this.player.tick(delta, this.keymap, this.mouse_x, this.ball, this, this.mouse_down);
 			this.level.tick(delta, this.ball, this.projectiles);
 			this.ball.tick(delta);
 			this.collectibles.tick(delta);
@@ -117,8 +125,9 @@ var GameState = BaseState.extend({
 			this.osd.tick();
 			this.game.stage.update();
 			// check if level complete
-			if (this.level.is_complete()) {
+			if (this.level.is_complete() || this.keymap[77]) {
 				this.level.remove(this.container);
+				this.reset(false);
 				this.level = this.lm.next();
 				this.level.add(this.container);
 			}

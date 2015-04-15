@@ -19,6 +19,7 @@ var Game = Class.extend({
 		{src : "brick_grey.png"  , id         : "brick_grey"} ,
 		{src : "brick_purple.png"  , id       : "brick_purple"} ,
 		{src : "brick_red.png"  , id          : "brick_red"} ,
+		{src : "brick_white.png"  , id          : "brick_white"} ,
 		{src : "projectile.png"  , id          : "projectile"} ,
 		{src : "powerup_elongate.png"  , id   : "powerup_elongate"} ,
 		{src : "powerup_shrink.png"  , id     : "powerup_shrink"} ,

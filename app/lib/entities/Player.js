@@ -32,7 +32,7 @@ var Player = Base.extend({
 	get_pos: function() {
 		return this.position;
 	},
-	interact: function(delta, keymap, mouse_x, gamestate) {
+	interact: function(delta, keymap, mouse_x, gamestate, mouse_down) {
 		if (keymap[37] || keymap[65]) { this.moveLeft(delta); }
 		if (keymap[39] || keymap[68]) { this.moveRight(delta); }
 		if (mouse_x != this.last_mouse_x) {
@@ -42,7 +42,7 @@ var Player = Base.extend({
 			this.checkRight();
 		}
 		this.powerup.set(this.position.x, this.position.y);
-		this.powerup.interact(delta, keymap, this, gamestate);
+		this.powerup.interact(delta, keymap, this, gamestate, mouse_down);
 	},
 	moveLeft: function(delta) {
 		this.position.x -= this.speed * delta;
@@ -62,16 +62,18 @@ var Player = Base.extend({
 			this.position.x = this.max_x;
 		}
 	},
-	reset: function(container, game) {
+	reset: function(container, game, reset_powerup) {
 		this.position.x = this.initial.x;
 		this.position.y = this.initial.y;
-		this.powerup.remove(container);
-		this.powerup = new NonePowerup(game.loader);
-		container.addChild(this.powerup.getDrawable());
+		if (typeof reset_powerup === "undefined" || reset_powerup !== false) {
+			this.powerup.remove(container);
+			this.powerup = new NonePowerup(game.loader);
+			container.addChild(this.powerup.getDrawable());
+		}
 	},
-	tick: function(delta, keymap, mouse_x, ball, gamestate) {
+	tick: function(delta, keymap, mouse_x, ball, gamestate, mouse_down) {
 		this.powerup.tick(delta);
-		this.interact(delta, keymap, mouse_x, gamestate);
+		this.interact(delta, keymap, mouse_x, gamestate, mouse_down);
 		var intersection = ndgmr.checkRectCollision(this.powerup.getDrawable(),ball.sprite); 
 		if (intersection) {
 			if (intersection.x - intersection.rect1.x <= 10) {

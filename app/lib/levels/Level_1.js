@@ -3,7 +3,7 @@ var BaseLevel = require('./BaseLevel');
 var Level_1 = BaseLevel.extend({
 	create: function() {
 		max_bricks_width = 9;
-		max_bricks_height = 9;
+		max_bricks_height = 11;
 		brick_width = 48;
 		brick_height = 16;
 		for (var w = 1; w < max_bricks_width; w++) {

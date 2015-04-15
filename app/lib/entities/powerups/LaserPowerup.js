@@ -6,14 +6,13 @@ var LaserPowerup = BasePaddlePowerup.extend({
 	height: 20,
 	cooldown: 0.2,
 	current_cooldown: 0,
-	interact: function(delta, keymap, player, gamestate) {
-		if (keymap[32] && this.current_cooldown <= 0) {
+	interact: function(delta, keymap, player, gamestate, mouse_down) {
+		if ((keymap[32] || mouse_down) && this.current_cooldown <= 0) {
 			gamestate.addProjectile();
 			this.current_cooldown = this.cooldown;
 		}
 	},
 	tick: function(delta) {
-		console.log(this.current_cooldown);
 		if (this.current_cooldown > 0) {
 			this.current_cooldown -= delta;
 		}

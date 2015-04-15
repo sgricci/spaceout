@@ -7,8 +7,10 @@ var Brick = Base.extend({
 	},
 	img: null,
 	sprite: null,
+	color: null,
 	init: function(loader, x, y, color) {
 		this.position.x = x;
+		this.color = color;
 		this.position.y = y;
 		this.img = loader.getResult(this.get_color(color));
 		this.create();
@@ -32,6 +34,8 @@ var Brick = Base.extend({
 				return 'brick_purple';
 			case 4:
 				return 'brick_red';
+			case 5:
+				return 'brick_white';
 		}
 	},
 	getDrawable: function() {

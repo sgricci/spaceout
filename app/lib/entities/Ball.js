@@ -89,11 +89,19 @@ var Ball = Base.extend({
 				this.speed.y *= -1;
 				break;
 			case 'left':
-			case 'right':
 				this.speed.x *= 1.05;
 				this.speed.y *= 1.05;
 				this.speed.y *= -1;
 				this.speed.x *= -1;
+				orig_x = this.speed.x;
+				this.speed.x = this.speed.y;
+				this.speed.y = Math.abs(orig_x);
+				break;
+			case 'right':
+				this.speed.x *= 1.05;
+				this.speed.y *= 1.05;
+				//this.speed.y *= -1;
+				//this.speed.x *= -1;
 				orig_x = this.speed.x;
 				this.speed.x = this.speed.y;
 				this.speed.y = Math.abs(orig_x);

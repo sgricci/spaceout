@@ -10,11 +10,14 @@ var ProjectileCollection = Base.extend({
 	},
 	add: function(pos) {
 		var Projectile = require('../entities/Projectile');
-		var proj = new Projectile(this.loader, pos.x+16, pos.y);
+		var proj = new Projectile(this.loader, pos.x+18, pos.y);
+		this.projectiles.push(proj);
+		this.container.addChild(proj.getDrawable());
+		var Projectile = require('../entities/Projectile');
+		var proj = new Projectile(this.loader, pos.x+38, pos.y);
 		this.projectiles.push(proj);
 		this.container.addChild(proj.getDrawable());
 	},
-	
 	tick: function(delta) {
 		for(var i = 0; i < this.projectiles.length; i++) {
 			var res = this.projectiles[i].tick(delta);
@@ -22,6 +25,12 @@ var ProjectileCollection = Base.extend({
 				this.projectiles.splice(i, 1);
 			}
 		}
+	},
+	reset: function() {
+		for(var i = 0; i < this.projectiles.length; i++) {
+			this.container.removeChild(this.projectiles[i].getDrawable());
+		}
+		this.projectiles = [];
 	},
 	destroy: function(index) {
 		this.container.removeChild(this.projectiles[index].getDrawable());
